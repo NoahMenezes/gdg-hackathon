@@ -1,10 +1,17 @@
 "use client";
 
-import { ArrowUpRight, Cpu, Leaf, Coins, ShieldCheck } from "lucide-react";
+import {
+  ArrowUpRight,
+  Cpu,
+  Leaf,
+  Coins,
+  ShieldCheck,
+  Search,
+} from "lucide-react";
 import { Show, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
 import { motion } from "framer-motion";
 
-export default function PrototypePage() {
+export default function LiveLedgerPage() {
   return (
     <main className="bg-black text-white overflow-hidden font-body">
       {/* SECTION 1 — SHARED NAVBAR */}
@@ -58,13 +65,16 @@ export default function PrototypePage() {
       {/* SECTION 2 — HERO */}
       <section className="relative overflow-visible h-175 bg-black pt-32">
         <div className="relative z-10 flex flex-col items-center text-center px-4 max-w-5xl mx-auto">
+          <span className="liquid-glass rounded-full px-3.5 py-1 text-xs font-medium text-white inline-block mb-8">
+            Live On-Chain Ledger
+          </span>
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.8 }}
             className="text-5xl md:text-6xl lg:text-7xl font-heading italic text-white tracking-[-4px] leading-[0.8] mb-8"
           >
-            Goa Pilot — District Intelligence Dashboard
+            Every credit. Every sensor. Fully transparent.
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -72,20 +82,21 @@ export default function PrototypePage() {
             transition={{ delay: 0.5, duration: 0.8 }}
             className="text-lg md:text-xl text-white/60 font-light max-w-2xl mb-12"
           >
-            VerdiChain's inaugural pilot deployment across North and South Goa.
-            12 sensor nodes. 3 reforestation blocks. Real CO₂ data. Live minting
-            on Sepolia testnet. Transforming Goan land management from reactive
-            reporting to sensor-proven, on-chain verified carbon accounting.
+            The VerdiChain public ledger is a real-time view of all sensor
+            nodes, ML validation events, minted credits, and retirements — all
+            sourced directly from Ethereum. No filters. No spin. Just proof.
           </motion.p>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.8, duration: 0.5 }}
-            className="grid grid-cols-2 gap-6 w-full max-w-md"
+            className="grid grid-cols-2 md:grid-cols-4 gap-6 w-full max-w-2xl"
           >
             {[
-              { value: "12", label: "Nodes Deployed" },
-              { value: "3", label: "Credits Minted (Testnet)" },
+              { value: "1,284", label: "Credits Minted" },
+              { value: "842", label: "Active Sensor Nodes" },
+              { value: "9,340 tCO₂e", label: "Total Sequestration Verified" },
+              { value: "0", label: "Double-Counted Credits" },
             ].map((stat, i) => (
               <div key={i} className="text-center">
                 <span className="text-3xl md:text-4xl font-heading italic text-white tracking-tight">
@@ -104,25 +115,26 @@ export default function PrototypePage() {
       <section className="py-24 px-6 md:px-16 lg:px-24 relative z-10">
         <div className="max-w-7xl mx-auto text-center">
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-heading italic text-white tracking-tight leading-[0.9] mb-6">
-            Goa Node Health Map
+            Global Node Map
           </h2>
           <p className="text-white/60 font-light mb-12 max-w-2xl mx-auto">
-            Live sensor status across the Goa pilot network. Data feeds directly
-            into the ML validation pipeline. Verified sequestration events
-            trigger testnet minting automatically via Sepolia smart contract.
+            Live positions of all deployed VerdiChain sensor nodes. Green =
+            actively sequestering and transmitting. Yellow = below minting
+            threshold. Red = anomaly detected or offline. Each node links to its
+            full sensor telemetry feed and minted credit history.
           </p>
           <div className="liquid-glass rounded-3xl p-8 mb-8">
             {/* Placeholder for map */}
             <div className="h-96 bg-black/50 rounded-2xl flex items-center justify-center">
               <span className="text-white/40">
-                Goa Pilot Node Map Coming Soon
+                Interactive World Map Coming Soon
               </span>
             </div>
           </div>
           <div className="flex flex-wrap justify-center gap-4">
             {[
-              "Anomaly Flag: Node #04 — Ponda Block (sensor flatline detected)",
-              "Threshold Crossed: Node #09 — Quepem South — Minting in progress",
+              "Anomaly Detected: Node #0471 — Borneo Cluster",
+              "Threshold Crossed: Node #0388 — Amazon South Block — Minting Now",
             ].map((alert, i) => (
               <span
                 key={i}
@@ -139,18 +151,18 @@ export default function PrototypePage() {
       <section className="py-24 px-6 md:px-16 lg:px-24 bg-white/2 border-y border-white/5 relative z-10">
         <div className="max-w-7xl mx-auto">
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-heading italic text-white tracking-tight leading-[0.9] mb-12 text-center">
-            Pilot Analytics Feed
+            Live Analytics Feed
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
             {[
-              { label: "ML Validation Accuracy", value: "92.4%", trend: "Up" },
+              { label: "ML Validation Accuracy", value: "94.1%", trend: "Up" },
               {
                 label: "Sensor Readings Logged",
-                value: "1.4M",
+                value: "2.8M",
                 trend: "Steady",
               },
-              { label: "Active Nodes", value: "12", trend: "Growth" },
-              { label: "Fraud Flags Caught", value: "7", trend: "Down" },
+              { label: "Active Nodes", value: "842", trend: "Growth" },
+              { label: "Fraud Flags Rejected", value: "99", trend: "Down" },
             ].map((metric, i) => (
               <div key={i} className="liquid-glass rounded-2xl p-6 text-center">
                 <span className="text-2xl font-heading italic text-white">
@@ -167,17 +179,46 @@ export default function PrototypePage() {
           </div>
           <div className="liquid-glass rounded-2xl p-6">
             <h3 className="text-lg font-heading italic text-white mb-4">
-              Latest Testnet Mint
+              Recent Minting Events
             </h3>
             <p className="text-white/60 text-sm">
-              Node #09 — Quepem South — 0.12 tCO₂e confirmed by ML. Minting on
-              Sepolia. TX hash pending.
+              Node #0388 — Amazon South Block — 0.3 tCO₂e confirmed. TX:
+              0x3f8a...d21c. Minted 4 minutes ago.
             </p>
           </div>
         </div>
       </section>
 
-      {/* SECTION 5 — QUICK STATS */}
+      {/* SECTION 5 — CREDIT EXPLORER */}
+      <section className="py-24 px-6 md:px-16 lg:px-24 relative z-10">
+        <div className="max-w-4xl mx-auto text-center">
+          <span className="liquid-glass rounded-full px-3.5 py-1 text-xs font-medium text-white inline-block mb-4">
+            Credit Explorer
+          </span>
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-heading italic text-white tracking-tight leading-[0.9] mb-6">
+            Search any credit. Verify in seconds.
+          </h2>
+          <p className="text-white/60 font-light mb-12 max-w-2xl mx-auto">
+            Enter a credit token ID or scan a QR code to pull the full proof
+            record: sensor node ID, GPS coordinates, measurement window, raw
+            data hash, ML validation log, minting transaction, and current owner
+            wallet.
+          </p>
+          <div className="flex flex-col sm:flex-row items-center gap-4 mb-8">
+            <input
+              type="text"
+              placeholder="Enter Token ID or paste Transaction Hash"
+              className="flex-1 liquid-glass rounded-full px-6 py-4 text-white placeholder-white/40 bg-transparent border border-white/10 focus:border-white/20 outline-none"
+            />
+            <button className="liquid-glass-strong rounded-full px-8 py-4 text-sm font-medium flex items-center gap-2 hover:bg-white/10 transition-colors">
+              <Search className="w-4 h-4" />
+              Verify Credit
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* SECTION 6 — QUICK STATS */}
       <section className="py-24 px-6 md:px-16 lg:px-24 bg-white/2 border-y border-white/5 relative z-10">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
@@ -185,26 +226,26 @@ export default function PrototypePage() {
               {
                 icon: Cpu,
                 label: "Sensor Nodes",
-                value: "12 Active",
-                change: "99.8% uptime",
+                value: "842 Active",
+                change: "99.8% uptime this month",
               },
               {
                 icon: Leaf,
-                label: "CO₂e Logged",
-                value: "1.8 tonnes",
-                change: "+0.3 this week",
+                label: "CO₂e Verified",
+                value: "9,340 tonnes",
+                change: "+412 tonnes this week",
               },
               {
                 icon: Coins,
-                label: "Testnet Credits",
-                value: "3 Minted",
-                change: "All QR-verifiable",
+                label: "Credits Minted",
+                value: "1,284 tokens",
+                change: "+38 this week",
               },
               {
                 icon: ShieldCheck,
-                label: "Fraud Flags",
-                value: "7 Caught",
-                change: "0 reached minting",
+                label: "Fraud Rejections",
+                value: "99 flagged",
+                change: "All stopped before minting",
               },
             ].map((stat, i) => (
               <div key={i} className="liquid-glass rounded-2xl p-6 text-center">

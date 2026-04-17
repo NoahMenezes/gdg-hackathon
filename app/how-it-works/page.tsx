@@ -1,7 +1,14 @@
 "use client";
 
 import React, { useRef, useState, useEffect } from "react";
-import { ArrowUpRight, ChevronDown } from "lucide-react";
+import {
+  ArrowUpRight,
+  ChevronDown,
+  Leaf,
+  Wind,
+  Thermometer,
+  Activity,
+} from "lucide-react";
 import { Show, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
 import { motion, useScroll, useTransform, useInView } from "framer-motion";
 import { BlurText } from "@/components/BlurText";
@@ -179,6 +186,60 @@ const FAQS = [
   },
 ];
 
+const SENSORS = [
+  {
+    icon: Leaf,
+    name: "Soil Carbon Sensor",
+    desc: "Measures soil organic carbon concentration as a proxy for long-term biomass sequestration. Readings logged every 15 minutes.",
+  },
+  {
+    icon: Wind,
+    name: "CO₂ Flux Monitor",
+    desc: "Tracks atmospheric CO₂ concentration differential above and at ground level to quantify net gas exchange.",
+  },
+  {
+    icon: Thermometer,
+    name: "Temperature & Humidity Logger",
+    desc: "Environmental context data used by the ML model to normalize readings and cross-validate against regional climate baselines.",
+  },
+  {
+    icon: Activity,
+    name: "Biomass Growth Proxy",
+    desc: "Correlated indices from soil moisture, conductivity, and root-zone resistance to estimate above-ground biomass growth indirectly.",
+  },
+];
+
+const ML_STEPS = [
+  {
+    num: "01",
+    name: "Data Ingestion & Cleaning",
+    phase: "ML",
+    dur: "",
+    desc: "Sensor packets arrive signed. The pipeline verifies signatures, checks for dropout patterns, and discards any anomalous readings before processing begins.",
+  },
+  {
+    num: "02",
+    name: "Spoofing & Anomaly Detection",
+    phase: "ML",
+    dur: "",
+    desc: "A trained classifier checks reading sequences against known-good baselines for the biome type. Unnatural consistency, stepwise jumps, or sensor flatlines trigger an immediate fraud flag.",
+  },
+  {
+    num: "03",
+    name: "Sequestration Estimation",
+    phase: "ML",
+    dur: "",
+    desc: "Validated readings feed a regression model trained on 50M+ correlated data points from peer-reviewed field studies to estimate net tonnes of CO₂ sequestered over the measurement period.",
+  },
+  {
+    num: "04",
+    name: "Threshold Confirmation",
+    phase: "ML",
+    dur: "",
+    desc: "When the estimated sequestration crosses a configurable minimum threshold (default: 0.1 tonne CO₂e), the ML pipeline generates a signed confirmation payload and dispatches it to the smart contract.",
+  },
+];
+
 function TimelineStep({
   step,
   index,
@@ -280,24 +341,29 @@ export default function HowItWorksPage() {
       <nav className="fixed top-4 w-full z-50 px-6 md:px-16 flex items-center justify-between max-w-350 left-1/2 -translate-x-1/2">
         <div className="flex-1 flex justify-start">
           <div className="shrink-0 relative w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center">
-            <span className="font-heading italic text-2xl">F</span>
+            <span className="font-heading italic text-2xl">V</span>
           </div>
         </div>
         <div className="hidden md:flex liquid-glass rounded-full px-8 py-3 items-center gap-8 shrink-0">
-          {["Home", "Services", "Work", "Process"].map((link) => (
+          {[
+            { name: "Home", href: "/" },
+            { name: "How It Works", href: "/how-it-works" },
+            { name: "Solutions", href: "/solutions" },
+            { name: "Live Ledger", href: "/live-ledger" },
+          ].map((link) => (
             <a
-              key={link}
-              href={link === "Home" ? "/" : `/${link.toLowerCase()}`}
+              key={link.name}
+              href={link.href}
               className="text-sm font-medium text-white/90 hover:text-white transition-colors"
             >
-              {link}
+              {link.name}
             </a>
           ))}
           <a
             href="/prototype"
             className="bg-white/10 hover:bg-white/20 text-white text-[10px] uppercase tracking-widest font-bold px-3 py-1 rounded-full transition-colors border border-white/10"
           >
-            Prototype
+            Live Demo
           </a>
         </div>
         <div className="flex-1 flex justify-end items-center gap-4">
@@ -309,7 +375,7 @@ export default function HowItWorksPage() {
             </SignInButton>
             <SignUpButton mode="modal">
               <button className="bg-white text-black rounded-full px-5 py-2.5 text-sm font-medium flex items-center gap-2 hover:bg-white/90 transition-colors cursor-pointer">
-                Start Free Trial <ArrowUpRight className="w-4 h-4" />
+                Get Started <ArrowUpRight className="w-4 h-4" />
               </button>
             </SignUpButton>
           </Show>
@@ -335,10 +401,10 @@ export default function HowItWorksPage() {
         {/* Content */}
         <div className="relative z-10 flex flex-col items-center text-center px-4 max-w-5xl mx-auto pt-40">
           <span className="liquid-glass rounded-full px-3.5 py-1 text-xs font-medium text-white inline-block mb-8">
-            Our Process
+            The System
           </span>
           <BlurText
-            text="Hours, not seasons."
+            text="Three layers. One unbreakable proof."
             className="text-7xl md:text-8xl lg:text-[7rem] font-heading italic text-white tracking-[-6px] leading-[0.9] mb-8"
           />
           <motion.p
@@ -347,8 +413,10 @@ export default function HowItWorksPage() {
             transition={{ delay: 0.8, duration: 0.8 }}
             className="text-lg md:text-xl text-white/60 font-light max-w-2xl mb-12"
           >
-            Most ag consultants take weeks to deliver a field report. We take 24
-            hours. Here's exactly how — and why it works.
+            VerdiChain is built on three tightly integrated layers — physical
+            hardware, machine learning validation, and blockchain minting. Each
+            layer makes the next one trustworthy. Together, they eliminate fraud
+            entirely.
           </motion.p>
 
           <motion.div
@@ -357,173 +425,198 @@ export default function HowItWorksPage() {
             transition={{ delay: 0.9, duration: 0.5 }}
             className="flex flex-wrap items-center justify-center gap-4 w-full"
           >
-            {["24 hrs first report", "12-step process", "0 missed alerts"].map(
-              (pill) => (
-                <span
-                  key={pill}
-                  className="liquid-glass-strong rounded-full px-5 py-2 text-sm font-medium text-white"
-                >
-                  {pill}
-                </span>
-              ),
-            )}
+            {["Hardware Layer", "ML Layer", "Blockchain Layer"].map((pill) => (
+              <span
+                key={pill}
+                className="liquid-glass-strong rounded-full px-5 py-2 text-sm font-medium text-white"
+              >
+                {pill}
+              </span>
+            ))}
           </motion.div>
         </div>
       </section>
 
-      {/* SECTION 3 — TIMELINE */}
+      {/* SECTION 3 — LAYER HARDWARE */}
+      <section className="py-24 px-6 md:px-16 lg:px-24 relative z-10">
+        <div className="max-w-7xl mx-auto">
+          <div className="mb-24 text-center md:text-left">
+            <span className="liquid-glass rounded-full px-3.5 py-1 text-xs font-medium text-white inline-block mb-4">
+              Layer 01 — Hardware
+            </span>
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-heading italic text-white tracking-tight leading-[0.9]">
+              The sensor is the source of truth.
+            </h2>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div>
+              <p className="text-white/60 font-light mb-8 leading-relaxed max-w-md text-lg">
+                Every VerdiChain deployment begins with a physical sensor node
+                placed in or near the green space being credited. The node is a
+                Raspberry Pi-based unit with a suite of environmental sensors,
+                costing approximately $40 in components and designed for outdoor
+                durability and low-power continuous operation.
+              </p>
+
+              <div className="grid grid-cols-1 gap-6">
+                {SENSORS.map((sensor, i) => (
+                  <div key={i} className="flex items-start gap-4">
+                    <div className="liquid-glass-strong rounded-full w-10 h-10 flex items-center justify-center shrink-0">
+                      <sensor.icon className="w-5 h-5 text-white" />
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-heading italic text-white mb-2">
+                        {sensor.name}
+                      </h3>
+                      <p className="text-white/60 text-sm font-body font-light leading-relaxed">
+                        {sensor.desc}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <p className="text-white/40 text-xs mt-6 italic">
+                All sensor data is cryptographically signed with a device-unique
+                key at source. Unsigned data is rejected before it ever reaches
+                the ML pipeline.
+              </p>
+            </div>
+            <div className="rounded-2xl overflow-hidden liquid-glass relative group aspect-4/3">
+              {/* Placeholder for sensor image */}
+              <img
+                src="https://images.unsplash.com/photo-1625246333195-78d9c38ad449?q=80&w=800&auto=format&fit=crop"
+                alt="Sensor Node"
+                className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* SECTION 4 — LAYER ML */}
       <section className="py-24 px-6 md:px-16 flex flex-col items-center">
         <div className="mb-24 text-center">
           <span className="liquid-glass rounded-full px-3.5 py-1 text-xs font-medium text-white inline-block mb-4">
-            The 12 Steps
+            Layer 02 — Machine Learning
           </span>
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-heading italic text-white tracking-tight leading-[0.9]">
-            Every farm. Every time.
+            The model decides. The model cannot be bribed.
           </h2>
         </div>
 
+        <p className="text-lg text-white/60 font-light mb-10 max-w-2xl mx-auto">
+          Raw sensor data is meaningless without validation. Our ML pipeline
+          performs three critical functions: anomaly detection to catch spoofed
+          or faulty data, sequestration estimation to quantify CO₂ absorbed, and
+          threshold confirmation to trigger minting only when the evidence is
+          statistically conclusive.
+        </p>
+
         <div className="w-full flex justify-center">
           <div className="flex flex-col">
-            {TIMELINE_STEPS.map((step, i) => (
+            {ML_STEPS.map((step, i) => (
               <TimelineStep key={step.num} step={step} index={i} />
             ))}
           </div>
         </div>
       </section>
 
-      {/* SECTION 4 — PHASE OVERVIEW (Gantt) */}
-      <section className="py-24 px-6 md:px-16 lg:px-24 border-y border-white/5 bg-white/2">
-        <div className="max-w-6xl mx-auto">
-          <div className="mb-16">
+      {/* SECTION 5 — LAYER BLOCKCHAIN */}
+      <section className="py-24 px-6 md:px-16 lg:px-24 relative z-10">
+        <div className="max-w-7xl mx-auto">
+          <div className="mb-24 text-center md:text-left">
             <span className="liquid-glass rounded-full px-3.5 py-1 text-xs font-medium text-white inline-block mb-4">
-              At a Glance
+              Layer 03 — Blockchain
             </span>
-            <h2 className="text-4xl md:text-5xl font-heading italic text-white tracking-tight leading-[0.9] mb-4">
-              From sign-up to harvest in one season.
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-heading italic text-white tracking-tight leading-[0.9]">
+              Minted on-chain. Owned forever.
             </h2>
-            <p className="text-white/40 text-xs mt-6 italic">
-              * Timeline shown for standard grain operation. Specialty crops and
-              large-scale deployments may vary.
-            </p>
           </div>
 
-          <div className="w-full overflow-x-auto pb-8 hide-scrollbar">
-            <div className="min-w-200 flex flex-col gap-4">
-              {/* Timeline Header */}
-              <div className="flex text-white/30 text-xs font-body uppercase tracking-widest font-medium border-b border-white/10 pb-4 mb-4">
-                <div className="w-[10%]">Time</div>
-                <div className="w-[90%] flex">
-                  <div className="flex-1 text-left pl-4">Week 1</div>
-                  <div className="flex-1 text-left pl-4">Week 2</div>
-                  <div className="flex-2 text-left pl-4 border-x border-white/10 relative z-10">
-                    Week 3–4
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div>
+              <p className="text-white/60 font-light mb-8 leading-relaxed max-w-md text-lg">
+                The signed ML confirmation payload triggers an Ethereum smart
+                contract that mints an ERC-721 NFT token representing one
+                verified carbon credit. The token metadata includes the sensor
+                node ID, GPS coordinates, measurement window, sequestration
+                estimate, ML model version, and a hash of the raw data bundle —
+                all permanently on-chain.
+              </p>
+
+              <div className="grid grid-cols-1 gap-4">
+                {[
+                  { key: "Token Standard", value: "ERC-721 (NFT)" },
+                  {
+                    key: "Network",
+                    value: "Ethereum (Mainnet + Sepolia Testnet)",
+                  },
+                  {
+                    key: "Mint Trigger",
+                    value: "ML confirmation payload (signed)",
+                  },
+                  {
+                    key: "Metadata",
+                    value: "Node ID, GPS, timestamp, CO₂e estimate, data hash",
+                  },
+                  {
+                    key: "Verification",
+                    value: "Public QR code → Etherscan + VerdiChain explorer",
+                  },
+                  {
+                    key: "Transfer",
+                    value: "Standard ERC-721 transfer to buyer wallet",
+                  },
+                ].map((prop, i) => (
+                  <div
+                    key={i}
+                    className="flex justify-between items-center py-2 border-b border-white/10"
+                  >
+                    <span className="text-white/60 text-sm font-medium">
+                      {prop.key}
+                    </span>
+                    <span className="text-white text-sm">{prop.value}</span>
                   </div>
-                  <div className="flex-3 text-center">Season-long</div>
-                  <div className="flex-1 text-right pr-4">Post-harvest</div>
-                </div>
+                ))}
               </div>
 
-              {/* Tracks */}
-              <div className="flex items-center text-sm">
-                <div className="w-[10%] text-white/60 font-medium">Setup</div>
-                <div className="w-[90%] relative h-10 liquid-glass rounded-full">
-                  <div className="absolute left-0 top-0 bottom-0 w-[20%] liquid-glass-strong rounded-full border border-blue-500/20 flex items-center px-4">
-                    <span className="text-blue-200 text-xs font-medium truncate">
-                      Onboarding + Analysis
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex items-center text-sm">
-                <div className="w-[10%] text-white/60 font-medium">Review</div>
-                <div className="w-[90%] relative h-10 liquid-glass rounded-full">
-                  <div className="absolute left-[20%] top-0 bottom-0 w-[20%] liquid-glass-strong rounded-full border border-orange-500/20 flex items-center px-4">
-                    <span className="text-orange-200 text-xs font-medium truncate">
-                      Planning + Agronomist Review
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex items-center text-sm">
-                <div className="w-[10%] text-white/60 font-medium">
-                  Integration
-                </div>
-                <div className="w-[90%] relative h-10 liquid-glass rounded-full">
-                  <div className="absolute left-[40%] top-0 bottom-0 w-[20%] bg-white text-black rounded-full flex items-center px-4 z-10 shadow-[0_0_20px_rgba(255,255,255,0.3)]">
-                    <span className="text-black text-xs font-medium truncate">
-                      Deployment + Integration
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex items-center text-sm">
-                <div className="w-[10%] text-white/60 font-medium">Growth</div>
-                <div className="w-[90%] relative h-10 liquid-glass rounded-full">
-                  <div className="absolute left-[60%] top-0 bottom-0 w-[30%] liquid-glass-strong rounded-full border border-yellow-500/20 flex items-center justify-center px-4">
-                    <span className="text-yellow-200 text-xs font-medium truncate">
-                      In-Season Monitoring
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex items-center text-sm">
-                <div className="w-[10%] text-white/60 font-medium">Yield</div>
-                <div className="w-[90%] relative h-10 liquid-glass rounded-full">
-                  <div className="absolute right-0 top-0 bottom-0 w-[10%] liquid-glass-strong rounded-full border border-slate-500/20 flex items-center px-4 justify-end">
-                    <span className="text-slate-200 text-xs font-medium truncate">
-                      Debrief + Next Season Plan
-                    </span>
-                  </div>
-                </div>
-              </div>
+              <button className="liquid-glass-strong rounded-full px-8 py-4 text-sm font-medium hover:bg-white/5 transition-colors mt-8">
+                View Sample Token on Testnet
+              </button>
+            </div>
+            <div className="rounded-2xl overflow-hidden liquid-glass relative group aspect-4/3">
+              {/* Placeholder for blockchain image */}
+              <img
+                src="https://images.unsplash.com/photo-1639762681485-074b7f938ba0?q=80&w=800&auto=format&fit=crop"
+                alt="Blockchain"
+                className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700"
+              />
             </div>
           </div>
         </div>
       </section>
 
-      {/* SECTION 5 — FAQ */}
-      <section className="py-24 px-6 md:px-16 lg:px-24 max-w-4xl mx-auto w-full">
-        <div className="mb-16 text-center md:text-left border-b border-white/5 pb-8 flex flex-col md:flex-row items-baseline justify-between">
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-heading italic text-white tracking-tight leading-[0.9]">
-            Answered before you ask.
+      {/* SECTION 6 — VERIFICATION FLOW */}
+      <section className="py-24 px-6 md:px-16 lg:px-24 relative z-10">
+        <div className="max-w-7xl mx-auto text-center">
+          <span className="liquid-glass rounded-full px-3.5 py-1 text-xs font-medium text-white inline-block mb-4">
+            Verification
+          </span>
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-heading italic text-white tracking-tight leading-[0.9] mb-6">
+            Anyone can verify. No account needed.
           </h2>
-          <span className="liquid-glass rounded-full px-3.5 py-1 text-xs font-medium text-white mt-4 md:mt-0 md:ml-6 inline-block shrink-0">
-            Questions
-          </span>
-        </div>
-
-        <Accordion type="single" collapsible className="w-full">
-          {FAQS.map((faq, i) => (
-            <AccordionItem key={i} value={`item-${i}`}>
-              <AccordionTrigger>{faq.q}</AccordionTrigger>
-              <AccordionContent>{faq.a}</AccordionContent>
-            </AccordionItem>
-          ))}
-        </Accordion>
-      </section>
-
-      {/* SECTION 6 — TESTIMONIAL */}
-      <section className="py-32 px-6 w-full flex justify-center border-t border-white/5 bg-linear-to-b from-black to-white/2">
-        <div className="max-w-4xl text-center relative">
-          <span className="absolute -top-16 -left-8 md:-left-16 text-[12rem] font-heading italic text-white/5 leading-none select-none pointer-events-none">
-            "
-          </span>
-          <p className="text-2xl md:text-4xl font-heading italic text-white leading-tight mb-12 relative z-10">
-            I've used three precision ag platforms over the past decade.
-            FieldMind is the first one that actually saved my harvest — not just
-            tracked it. The early disease alert on our south block in August
-            gave us a 12-day treatment window. We'd have lost $400k without it.
+          <p className="text-lg text-white/60 font-light mb-10 max-w-2xl mx-auto">
+            Every minted credit ships with a QR code that resolves to the
+            VerdiChain public explorer. Scan it and see the full proof chain:
+            sensor readings, ML validation log, minting transaction hash, GPS
+            location, and current ownership. Regulators, buyers, and the public
+            all see the same immutable record.
           </p>
-          <div className="flex flex-col items-center gap-1">
-            <span className="font-medium text-white text-lg">Tom Dekker</span>
-            <span className="text-white/40 text-sm">
-              Owner-Operator, Dekker Family Farms
-            </span>
-          </div>
+          <button className="liquid-glass-strong rounded-full px-8 py-4 text-sm font-medium hover:bg-white/5 transition-colors">
+            Try the Explorer
+          </button>
         </div>
       </section>
 
@@ -539,26 +632,23 @@ export default function HowItWorksPage() {
         </div>
 
         <div className="relative z-10 flex flex-col items-center text-center max-w-4xl mx-auto flex-1 justify-center min-h-100">
-          <h2 className="text-6xl md:text-8xl font-heading italic text-white tracking-[-4px] leading-[0.85] mb-6">
-            Your next harvest starts here.
+          <h2 className="text-5xl md:text-6xl lg:text-7xl font-heading italic text-white tracking-[-4px] leading-[0.85] mb-6">
+            Ready to mint your first verified credit?
           </h2>
-          <p className="text-lg text-white/60 font-light mb-10 max-w-lg">
-            Book a free field assessment. See what AI-powered precision
-            agriculture can do for your land.
+          <p className="text-lg text-white/60 font-light mb-12 max-w-lg">
+            Deploy a sensor node. Let the data speak. Book a free call to scope
+            your first VerdiChain deployment.
           </p>
           <div className="flex items-center gap-4">
             <button className="liquid-glass-strong rounded-full px-8 py-4 text-base font-medium flex items-center gap-2 hover:bg-white/10 transition-colors">
-              Book Field Assessment <ArrowUpRight className="w-5 h-5 ml-1" />
+              Book a Consultation <ArrowUpRight className="w-5 h-5" />
             </button>
           </div>
         </div>
 
         <div className="relative z-10 mt-32 pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-white/40 text-xs font-light tracking-wide">
-            © 2026 FieldMind AI. All rights reserved.
-          </p>
-          <p className="hidden md:block text-white/20 text-xs font-body italic tracking-widest uppercase">
-            Grow smarter. Farm forever.
+            © 2026 VerdiChain. All rights reserved.
           </p>
           <div className="flex items-center gap-6">
             {["Privacy", "Terms", "Contact"].map((link) => (

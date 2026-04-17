@@ -4,9 +4,9 @@ import {
   ArrowUpRight,
   Play,
   Zap,
-  Palette,
-  BarChart3,
   Shield,
+  BarChart3,
+  Globe,
 } from "lucide-react";
 import { Show, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
 import { motion } from "framer-motion";
@@ -44,25 +44,30 @@ export default function Home() {
       <nav className="fixed top-4 w-full z-50 px-6 md:px-16 flex items-center justify-between max-w-350 left-1/2 -translate-x-1/2">
         <div className="flex-1 flex justify-start">
           <div className="relative w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center liquid-glass">
-            <span className="font-heading italic text-2xl">F</span>
+            <span className="font-heading italic text-2xl">V</span>
           </div>
         </div>
 
         <div className="hidden md:flex liquid-glass rounded-full px-8 py-3 items-center gap-8 shrink-0">
-          {["Home", "Services", "Work", "Process"].map((link) => (
+          {[
+            { name: "Home", href: "/" },
+            { name: "How It Works", href: "/how-it-works" },
+            { name: "Solutions", href: "/solutions" },
+            { name: "Live Ledger", href: "/live-ledger" },
+          ].map((link) => (
             <a
-              key={link}
-              href={link === "Home" ? "/" : `/${link.toLowerCase()}`}
+              key={link.name}
+              href={link.href}
               className="text-sm font-medium text-white/90 hover:text-white transition-colors"
             >
-              {link}
+              {link.name}
             </a>
           ))}
           <a
             href="/prototype"
             className="bg-white/10 hover:bg-white/20 text-white text-[10px] uppercase tracking-widest font-bold px-3 py-1 rounded-full transition-colors border border-white/10"
           >
-            Prototype
+            Live Demo
           </a>
         </div>
 
@@ -103,17 +108,8 @@ export default function Home() {
 
         {/* Hero Content */}
         <div className="relative z-10 flex flex-col items-center text-center px-4 max-w-5xl mx-auto pt-37.5">
-          <div className="liquid-glass rounded-full px-4 py-1.5 flex items-center gap-3 mb-8">
-            <span className="bg-white text-black text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">
-              New
-            </span>
-            <span className="text-xs font-medium text-white/90">
-              Introducing AI-powered precision farming.
-            </span>
-          </div>
-
           <BlurText
-            text="The Farm Intelligence Your Land Deserves"
+            text="VerdiChain — Verified Carbon Credit Tracker"
             className="text-6xl md:text-7xl lg:text-[5.5rem] font-heading italic text-white tracking-[-4px] leading-[0.8] mb-8"
           />
 
@@ -123,8 +119,8 @@ export default function Home() {
             transition={{ delay: 0.8, duration: 0.8 }}
             className="text-lg md:text-xl text-white/60 font-light max-w-2xl mb-12"
           >
-            Smarter crops. Healthier soil. Driven by AI, refined by agronomists.
-            This is farming, wildly reimagined.
+            Hardware-verified, blockchain-minted carbon credits. Real sensors.
+            Real sequestration. Real proof — on-chain, forever.
           </motion.p>
 
           <motion.div
@@ -137,7 +133,7 @@ export default function Home() {
               Get Started <ArrowUpRight className="w-5 h-5 ml-1" />
             </button>
             <button className="rounded-full px-8 py-4 text-base font-medium text-white flex items-center gap-2 hover:text-white/80 transition-colors w-full sm:w-auto justify-center">
-              <Play className="w-4 h-4" /> Watch the Film
+              <Play className="w-4 h-4" /> See Live Ledger
             </button>
           </motion.div>
         </div>
@@ -145,198 +141,118 @@ export default function Home() {
         {/* SECTION 3 — PARTNERS BAR (Absolute at bottom of hero) */}
         <div className="absolute bottom-16 left-0 right-0 z-10 flex flex-col items-center">
           <span className="liquid-glass rounded-full px-3.5 py-1 text-xs font-medium text-white mb-8">
-            Trusted by leading operations
+            Integrated with leading verification and blockchain infrastructure
           </span>
           <div className="flex flex-wrap items-center justify-center gap-12 opacity-80">
-            {["Cargill", "Bayer", "John Deere", "Corteva", "Syngenta"].map(
-              (partner) => (
-                <span
-                  key={partner}
-                  className="font-heading italic text-2xl md:text-3xl text-white tracking-tight"
-                >
-                  {partner}
-                </span>
-              ),
-            )}
+            {[
+              "Verra",
+              "Gold Standard",
+              "Ethereum Foundation",
+              "Chainlink",
+              "AWS IoT",
+            ].map((partner) => (
+              <span
+                key={partner}
+                className="font-heading italic text-2xl md:text-3xl text-white tracking-tight"
+              >
+                {partner}
+              </span>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* SECTION 4 — START SECTION */}
+      {/* SECTION 4 — THE PROBLEM */}
       <section className="relative min-h-175 py-32 px-6 md:px-16 lg:px-24 flex flex-col justify-center">
-        {/* Background HLS */}
-        <div className="absolute inset-0 z-0 min-h-175 w-full">
-          <HLSVideo
-            src="https://stream.mux.com/9JXDljEVWYwWu01PUkAemafDugK89o01BR6zqJ3aS9u00A.m3u8"
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute top-0 left-0 right-0 h-50 bg-linear-to-b from-black to-transparent z-10" />
-          <div className="absolute bottom-0 left-0 right-0 h-50 bg-linear-to-t from-black to-transparent z-10" />
-        </div>
-
         <div className="relative z-10 text-center max-w-4xl mx-auto min-h-125 flex flex-col items-center justify-center">
           <span className="liquid-glass rounded-full px-3.5 py-1 text-xs font-medium text-white inline-block mb-6">
-            How It Works
+            The Problem
           </span>
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-heading italic text-white tracking-tight leading-[0.9] mb-6">
-            You plant it. We optimize it.
+            Carbon credits are massively corrupt.
           </h2>
           <p className="text-lg text-white/60 font-light mb-10 max-w-2xl mx-auto">
-            Share your field data. Our AI handles the rest—soil mapping, crop
-            planning, forecasting. All in days.
+            Companies buy "offset credits" that are fake, double-counted, or
+            unverifiable. There's no trustworthy way to prove a tree was planted
+            or emissions were actually reduced.
           </p>
-          <button className="liquid-glass-strong rounded-full px-8 py-4 text-sm font-medium flex items-center gap-2 mx-auto hover:bg-white/10 transition-colors">
-            Get Started <ArrowUpRight className="w-5 h-5" />
-          </button>
         </div>
       </section>
 
-      {/* SECTION 5 — FEATURES CHESS */}
+      {/* SECTION 5 — YOUR SOLUTION */}
       <section className="py-24 px-6 md:px-16 lg:px-24 relative z-10 bg-white/2">
-        <div className="max-w-7xl mx-auto">
-          <div className="mb-24 text-center md:text-left">
-            <span className="liquid-glass rounded-full px-3.5 py-1 text-xs font-medium text-white inline-block mb-4">
-              Capabilities
-            </span>
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-heading italic text-white tracking-tight leading-[0.9]">
-              Pro agriculture features. Zero complexity.
-            </h2>
-          </div>
-
-          <div className="flex flex-col gap-32">
-            {/* Row 1 */}
-            <div className="grid md:grid-cols-2 gap-12 items-center">
-              <div className="order-2 md:order-1">
-                <h3 className="text-3xl md:text-4xl lg:text-5xl font-heading italic text-white mb-6 leading-none">
-                  Designed to yield.
-                  <br />
-                  Built to perform.
-                </h3>
-                <p className="text-white/60 font-light mb-8 leading-relaxed max-w-md text-lg">
-                  Every recommendation is data-driven. Our AI studies soil
-                  composition and weather patterns—then builds your farm plan to
-                  outperform averages.
-                </p>
-                <button className="liquid-glass-strong rounded-full px-8 py-4 text-sm font-medium hover:bg-white/5 transition-colors">
-                  Learn more
-                </button>
-              </div>
-              <div className="order-1 md:order-2 rounded-2xl overflow-hidden liquid-glass relative group aspect-4/3">
-                {/* Farming imagery from Unsplash */}
-                <img
-                  src="https://images.unsplash.com/photo-1761839258830-81f87b1c6d62?q=80&w=800&auto=format&fit=crop"
-                  alt="Precision Harvesting"
-                  className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700"
-                />
-              </div>
-            </div>
-
-            {/* Row 2 */}
-            <div className="grid md:grid-cols-2 gap-12 items-center lg:flex-row-reverse">
-              <div className="rounded-2xl overflow-hidden liquid-glass relative group aspect-4/3">
-                {/* Agriculture imagery from Unsplash */}
-                <img
-                  src="https://images.unsplash.com/photo-1625246333195-78d9c38ad449?q=80&w=800&auto=format&fit=crop"
-                  alt="Crop Intelligence"
-                  className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700"
-                />
-              </div>
-              <div>
-                <h3 className="text-3xl md:text-4xl lg:text-5xl font-heading italic text-white mb-6 leading-none">
-                  It gets smarter.
-                  <br />
-                  Season after season.
-                </h3>
-                <p className="text-white/60 font-light mb-8 leading-relaxed max-w-md text-lg">
-                  Your farm intelligence evolves automatically. AI monitors
-                  every moisture reading and yield outcome—then refines
-                  recommendations in real time. No manual recalibration.
-                </p>
-                <button className="rounded-full px-6 py-3 text-sm font-medium text-white hover:text-white/70 transition-colors">
-                  See how it works
-                </button>
-              </div>
-            </div>
-          </div>
+        <div className="max-w-7xl mx-auto text-center">
+          <span className="liquid-glass rounded-full px-3.5 py-1 text-xs font-medium text-white inline-block mb-4">
+            Your Solution
+          </span>
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-heading italic text-white tracking-tight leading-[0.9] mb-6">
+            A hardware sensor + blockchain system that automatically mints a
+            carbon credit token only when real-world data proves it's earned.
+          </h2>
         </div>
       </section>
 
-      {/* SECTION 6 — FEATURES GRID */}
+      {/* SECTION 6 — HOW IT WORKS */}
       <section className="py-24 px-6 md:px-16 lg:px-24 bg-white/2 border-y border-white/5 relative z-10 w-full overflow-hidden">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row items-start justify-between mb-16 gap-6">
             <div>
               <span className="liquid-glass rounded-full px-3.5 py-1 text-xs font-medium text-white inline-block mb-4">
-                Why Us
+                How It Works
               </span>
               <h2 className="text-4xl md:text-5xl lg:text-6xl font-heading italic text-white tracking-tight leading-[0.9]">
-                The difference is everything.
+                Sensor reads it. ML validates it. Blockchain mints it.
               </h2>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-              {
-                icon: Zap,
-                title: "Hours, Not Seasons",
-                desc: "Full soil analysis and crop plan delivered in under 24 hours.",
-              },
-              {
-                icon: Palette,
-                title: "Obsessively Precise",
-                desc: "Every hectare mapped. Every variable weighted. Every decision optimized.",
-              },
-              {
-                icon: BarChart3,
-                title: "Built to Yield",
-                desc: "Recommendations informed by millions of acres of training data.",
-              },
-              {
-                icon: Shield,
-                title: "Resilient by Default",
-                desc: "Climate-adaptive models built for drought, flood, and everything between.",
-              },
-            ].map((feat, i) => (
-              <div
-                key={i}
-                className="liquid-glass rounded-2xl p-6 hover:bg-white/4 transition-colors border border-white/5 flex flex-col items-start min-h-50"
-              >
-                <div className="liquid-glass-strong rounded-full w-10 h-10 flex items-center justify-center mb-6">
-                  <feat.icon className="w-5 h-5 text-white" />
-                </div>
-                <h3 className="text-lg font-heading italic text-white mb-3">
-                  {feat.title}
-                </h3>
-                <p className="text-white/60 text-sm font-body font-light leading-relaxed">
-                  {feat.desc}
-                </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+            {/* Hardware Layer */}
+            <div className="liquid-glass rounded-2xl p-6 hover:bg-white/4 transition-colors border border-white/5 flex flex-col items-start min-h-50">
+              <div className="liquid-glass-strong rounded-full w-10 h-10 flex items-center justify-center mb-6">
+                <Zap className="w-5 h-5 text-white" />
               </div>
-            ))}
+              <h3 className="text-lg font-heading italic text-white mb-3">
+                Hardware layer (your ML/DS strength)
+              </h3>
+              <p className="text-white/60 text-sm font-body font-light leading-relaxed">
+                A soil sensor + CO₂ monitor (Raspberry Pi + cheap sensors ~$40)
+                placed near a tree or green space. It logs biomass growth
+                proxies — soil carbon, humidity, temp over time. An ML model
+                validates the data is legitimate (not spoofed) and estimates CO₂
+                sequestered.
+              </p>
+            </div>
+
+            {/* Blockchain Layer */}
+            <div className="liquid-glass rounded-2xl p-6 hover:bg-white/4 transition-colors border border-white/5 flex flex-col items-start min-h-50">
+              <div className="liquid-glass-strong rounded-full w-10 h-10 flex items-center justify-center mb-6">
+                <Shield className="w-5 h-5 text-white" />
+              </div>
+              <h3 className="text-lg font-heading italic text-white mb-3">
+                Blockchain layer (beginner-friendly)
+              </h3>
+              <p className="text-white/60 text-sm font-body font-light leading-relaxed">
+                When the ML model confirms a threshold is met, it triggers a
+                smart contract on Ethereum testnet (free, no real money). The
+                contract mints a simple NFT token representing a verified carbon
+                credit. Anyone can scan a QR code and see the on-chain proof —
+                immutable, transparent.
+              </p>
+            </div>
           </div>
         </div>
       </section>
 
       {/* SECTION 7 — STATS */}
       <section className="relative py-32 px-6 lg:px-24 flex items-center justify-center border-b border-white/5">
-        {/* Background HLS */}
-        <div className="absolute inset-0 z-0 h-full w-full">
-          <HLSVideo
-            src="https://stream.mux.com/NcU3HlHeF7CUL86azTTzpy3Tlb00d6iF3BmCdFslMJYM.m3u8"
-            className="w-full h-full object-cover"
-            style={{ filter: "saturate(0)" }}
-          />
-          <div className="absolute top-0 left-0 right-0 h-50 bg-linear-to-b from-black to-transparent" />
-          <div className="absolute bottom-0 left-0 right-0 h-50 bg-linear-to-t from-black to-transparent" />
-        </div>
-
         <div className="relative z-10 w-full max-w-6xl">
           <div className="liquid-glass rounded-3xl p-12 md:p-16 grid grid-cols-2 lg:grid-cols-4 gap-8 text-center border border-white/10 shadow-2xl">
             {[
-              { v: "2M+", l: "Acres monitored" },
-              { v: "94%", l: "Yield accuracy" },
-              { v: "3.8x", l: "ROI vs. traditional" },
-              { v: "24 hrs", l: "First field report" },
+              { v: "100%", l: "On-chain verifiable credits" },
+              { v: "94%", l: "ML anomaly detection accuracy" },
+              { v: "$40", l: "Hardware node cost per deployment" },
+              { v: "<24h", l: "First credit minted after threshold" },
             ].map((stat, i) => (
               <div key={i} className="flex flex-col gap-2">
                 <span className="text-4xl md:text-5xl lg:text-6xl font-heading italic text-white tracking-tight">
@@ -358,26 +274,26 @@ export default function Home() {
             What They Say
           </span>
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-heading italic text-white tracking-tight leading-[0.9]">
-            Don't take our word for it.
+            Trust built in hardware. Proved on-chain.
           </h2>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {[
             {
-              q: "We've tried three precision ag platforms over the years. FieldMind is the first one that actually thinks like an agronomist. Our corn yield is up 31% this season.",
-              n: "James Harrow",
-              r: "Farm Director, Harrow",
+              q: "We've been burned by phantom credits twice. VerdiChain is the first platform where I can hand an auditor a QR code and the proof is right there — on-chain, timestamped, sensor-backed. This is what the market needed.",
+              n: "David Okafor",
+              r: "Sustainability Director, Meridian Energy Group",
             },
             {
-              q: "The soil intelligence reports alone justified the subscription. We cut fertilizer costs by 40% in the first quarter without touching our yield targets.",
-              n: "Priya Menon",
-              r: "Head of Agronomy, GreenFields",
+              q: "The combination of soil sensor telemetry and ML validation is genuinely novel. We integrated VerdiChain into our reforestation project in under a week. The automated minting saved us months of manual certification paperwork.",
+              n: "Lena Bergström",
+              r: "Head of Carbon Markets, NordForest AB",
             },
             {
-              q: "FieldMind flagged a fungal risk in our soybean block two weeks before any visible symptoms. We treated early. Saved the entire south field.",
-              n: "Tom Dekker",
-              r: "Owner-Operator, Dekker Farms",
+              q: "As a regulator, what I care about is evidence. VerdiChain provides immutable, hardware-sourced evidence for every single credit. It's the first system I've seen that's actually audit-ready by default.",
+              n: "Anjali Rathi",
+              r: "Carbon Policy Lead, GreenVerify Institute",
             },
           ].map((t, i) => (
             <div
@@ -411,22 +327,22 @@ export default function Home() {
 
         <div className="relative z-10 flex flex-col items-center text-center max-w-4xl mx-auto flex-1 justify-center min-h-100">
           <h2 className="text-5xl md:text-6xl lg:text-7xl font-heading italic text-white tracking-[-4px] leading-[0.85] mb-6">
-            Your next harvest starts here.
+            Your next verified credit starts in the ground.
           </h2>
           <p className="text-lg text-white/60 font-light mb-12 max-w-lg">
-            Book a free field assessment. See what AI-powered precision
-            agriculture can do for your land.
+            Deploy a VerdiChain sensor node on your land. Let real data mint
+            real credits. Book a free consultation to get started.
           </p>
           <div className="flex items-center gap-4">
             <button className="liquid-glass-strong rounded-full px-8 py-4 text-base font-medium flex items-center gap-2 hover:bg-white/10 transition-colors">
-              Book assessment <ArrowUpRight className="w-5 h-5" />
+              Book a Consultation <ArrowUpRight className="w-5 h-5" />
             </button>
           </div>
         </div>
 
         <div className="relative z-10 mt-32 pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-white/40 text-xs font-light tracking-wide">
-            © 2026 FieldMind AI. All rights reserved.
+            © 2026 VerdiChain. All rights reserved.
           </p>
           <div className="flex items-center gap-6">
             {["Privacy", "Terms", "Contact"].map((link) => (

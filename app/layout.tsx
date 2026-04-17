@@ -17,8 +17,9 @@ const barlow = Barlow({
 });
 
 export const metadata: Metadata = {
-  title: "FieldMind AI — Precision Agriculture Platform",
-  description: "AI-powered field intelligence. Satellite mapping, yield prediction, smart irrigation, and pest detection — all in one platform.",
+  title: "VerdiChain — Verified Carbon Credit Tracker",
+  description:
+    "Hardware-verified, blockchain-minted carbon credits. Real sensors. Real sequestration. Real proof — on-chain, forever.",
 };
 
 export default function RootLayout({
